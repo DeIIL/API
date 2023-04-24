@@ -21,15 +21,19 @@ class ImportCategoryUseCase {
 
       parseFile
         .on('data', async (line) => {
+          // line = ["name", "description"]
           const [name, description] = line;
           categories.push({
             name,
             description,
           });
         })
+        // vai executar quando finalizar o parse do parseFile
         .on('end', () => {
+          fs.promises.unlink(file.path);
           resolve(categories);
         })
+        // vai executar quando ocorrer um erro
         .on('error', (error) => {
           reject(error);
         });
